@@ -24,3 +24,23 @@ updates:
   labels:
   - enhancement
   - dependency-management
+
+- package-ecosystem: docker
+  directory: /.devcontainer
+  schedule:
+    interval: daily
+
+- package-ecosystem: npm
+  directory: /vendor/github.com/go-kivik/kivik/v3
+  schedule:
+    interval: daily
+
+- package-ecosystem: docker
+  directory: /vendor/github.com/samber/lo
+  schedule:
+    interval: daily
+
+- package-ecosystem: pip
+  directory: /vendor/go.opentelemetry.io/otel
+  schedule:
+    interval: daily

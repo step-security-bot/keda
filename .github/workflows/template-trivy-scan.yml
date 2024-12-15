@@ -31,11 +31,22 @@ on:
         required: true
         type: boolean
 
+permissions:
+  contents: read
+
 jobs:
   trivy-scan:
+    permissions:
+      contents: read  # for actions/checkout to fetch code
+      security-events: write  # for github/codeql-action/upload-sarif to upload SARIF results
     name: Trivy - ${{ inputs.runs-on }} - ${{ inputs.scan-type }} ${{ inputs.image-ref }}
     runs-on: ${{ inputs.runs-on }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Run Trivy
@@ -53,7 +64,7 @@ jobs:
           trivy-config: trivy.yml
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@df409f7d9260372bd5f19e5b04e83cb3c43714ae # v3.27.9
         if: ${{ inputs.publish }}
         with:
           sarif_file: ${{ inputs.output }}

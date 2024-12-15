@@ -17,6 +17,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5
         with:
@@ -24,13 +29,13 @@ jobs:
       - run: go version
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v8
-      - uses: fossas/fossa-action@main
+        uses: tj-actions/branch-names@6871f53176ad61624f978536bbf089c574dc19a2 # v8.0.1
+      - uses: fossas/fossa-action@11374cc3320ac97000df7aa0b52a60687cb23c09 # main
         name: Scanning with FOSSA
         with:
           api-key: ${{ env.fossa-key }}
           branch: ${{ steps.branch-name.outputs.current_branch }}
-      - uses: fossas/fossa-action@main
+      - uses: fossas/fossa-action@11374cc3320ac97000df7aa0b52a60687cb23c09 # main
         name: Executing tests with FOSSA
         with:
           api-key: ${{ env.fossa-key }}
